@@ -22,6 +22,40 @@ def get_business_modifier(promptQuery, model_name="gpt-4o-mini"):
 
 # Create LLM client using custom Azure OpenAI endpoint
 
+# Define the weight mapping
+WEIGHTS = {
+    "high": 3,
+    "medium": 2,
+    "low": 1
+}
+
+def get_weight(value):
+    return WEIGHTS.get(value.lower(), 1)  # default to 1 if invalid
+
+def calculate_modifier(args):
+    scores = [
+        get_weight(args.cr),
+        get_weight(args.ir),
+        get_weight(args.ar),
+        get_weight(args.data_sensitivity),
+        get_weight(args.hsm_usage),
+        get_weight(args.external_trust),
+        get_weight(args.financial_risk),
+    ]
+    total_score = sum(scores)
+
+    # Rule-based modifier mapping
+    if total_score == 18:
+        modifier = 1.5
+    elif total_score >= 14:
+        modifier = 1.3
+    elif total_score >= 10:
+        modifier = 1.2
+    else:
+        modifier = 1.0
+
+    return modifier, total_score
+
 def main():
     parser = argparse.ArgumentParser(description="Calculate Adjusted CVSS Score with Business Context")
     parser.add_argument("--cvss_base", type=float, required=True)
@@ -50,11 +84,12 @@ Based on these, suggest a numeric 'Business Modifier' (1.0 to 2.0 scale) that ad
 Respond with only the number.
 """
 
-    modifier = get_business_modifier(prompt)
-    adjusted_score = round(args.cvss_base * float(modifier), 1)
+   # modifier = get_business_modifier(prompt)
+    modifier, total_score = calculate_modifier(args)
+    adjusted_score = round(args.cvss_base * modifier, 1)
 
-    print(f"Modifier: {modifier} (type: {type(modifier)})")
-    print(f"Business Modifier: {modifier}")
+    print(f"Total Score: {total_score}")
+    print(f"Business Modifier (Rule-Based): {modifier}")
     print(f"Adjusted CVSS Score: {adjusted_score}")
 
 if __name__ == "__main__":
