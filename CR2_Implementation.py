@@ -112,7 +112,7 @@ def calculate_modifier(args):
         get_weight(args.financial_risk),
     ]
     total_score = sum(scores)
-    if total_score == 18:
+    if total_score >= 18:
         modifier = 1.5
     elif total_score >= 14:
         modifier = 1.3
