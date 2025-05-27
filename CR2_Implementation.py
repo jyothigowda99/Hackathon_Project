@@ -1,6 +1,7 @@
 import requests
 import json
 import argparse
+
 from openai import OpenAI
 
 # Create LLM client using custom Azure OpenAI endpoint
@@ -143,8 +144,7 @@ def read_input_and_calculate(cvss_base):
 
 # Main
 if __name__ == "__main__":
-    cve_id = "CVE-2023-0464"
-
+    cve_id = "CVE-2023-0464"    
     print("🧠 LLM Analysis:")
     print(analyze_cve(cve_id))
 
