@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cybersecurity Assistant</title>
+</head>
+<body>
+    <h1>🛡️ Cybersecurity Assistant</h1>
+    <form action="/ask" method="post" enctype="multipart/form-data">
+        <label>Security Question:</label><br>
+        <input type="text" name="question" style="width: 300px;"><br><br>
+        <label>Upload Excel File:</label><br>
+        <input type="file" name="file"><br><br>
+        <button type="submit">Ask</button>
+    </form>
+
+    {% if question %}
+    <h2>🔍 Your Question:</h2>
+    <p>{{ question }}</p>
+    <h2>📌 Assistant's Answer:</h2>
+    <pre>{{ answer }}</pre>
+    {% endif %}
+</body>
+</html>
